@@ -57,7 +57,7 @@ const followersArray = [
 ];
 
 
-axios.get("https://api.github.com/users/toneiojimz")
+axios.get("https://api.github.com/users/toneiobufon")
 .then(response => {
   //console.log(response);
  
@@ -71,7 +71,7 @@ axios.get("https://api.github.com/users/toneiojimz")
 const profileCards = document.querySelector(".cards");
 
 
-axios.get("https://api.github.com/users/toneiojimz/followers")
+axios.get("https://api.github.com/users/toneiobufon/followers")
 .then(response => {
   //console.log(response);
  
