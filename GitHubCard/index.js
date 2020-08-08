@@ -48,98 +48,81 @@
   bigknell
 */
 
-const followersArray = [
-  'https://api.github.com/users/Gio5298',
-  'https://api.github.com/users/ShandaWoods',
-  'https://api.github.com/users/D-Fink',
-  'https://api.github.com/users/Hail91',
-  'https://api.github.com/users/jevoncochran'
-];
 
+function profileCard(dataObj) {
 
-axios.get("https://api.github.com/users/toneiobufon")
-.then(response => {
-  //console.log(response);
+  // creating elements
+  const 
+  card = document.createElement('div'),
+  avatarImage = document.createElement('img'),
+  cardInfo = document.createElement('div'),
+  name = document.createElement('h3'),
+  userName = document.createElement('p'),
+  location = document.createElement('p'),
+  profile = document.createElement('p'),
+  profileUrl = document.createElement('a'),
+  followers = document.createElement('p'),
+  following = document.createElement('p'),
+  bio = document.createElement('p')
+
+  // appending children
+card.appendChild(avatarImage);
+card.appendChild(cardInfo);
+cardInfo.appendChild(name);
+cardInfo.appendChild(userName);
+cardInfo.appendChild(location);
+cardInfo.appendChild(profile);
+profile.appendChild(profileUrl);
+cardInfo.appendChild(followers);
+cardInfo.appendChild(following);
+cardInfo.appendChild(bio);
+
+  // adding content to elements
+  name.textContent = dataObj.name;
+  avatarImage.src = dataObj.avatar_url;
+  userName.textContent = dataObj.login;
+  location.textContent = `Location: ${dataObj.location}`;
+  profile.textContent = 'Profile:';
+  profileUrl.href = dataObj.html_url;
+  profileUrl.textContent = dataObj.html_url;
+  followers.textContent = `Followers: ${dataObj.followers}`;
+  following.textContent = `Following: ${dataObj.following}`;
+  bio.textContent = `Bio: ${dataObj.bio}`;
+  //adding classNames to elements
+
  
-    const newPerson = response.data;
-    profileCards.appendChild(gitCard(newPerson));
-  console.log(newPerson)
-})
-.catch(error => {
-  console.log("The data was not returned", error);
-});
-const profileCards = document.querySelector(".cards");
+  card.classList.add('card');
+  cardInfo.classList.add('card-info');
+  name.classList.add('name');
+  userName.classList.add('user');
+document.getElementsByClassName('container')[0].appendChild(card);
+return card;
+} 
 
 
-axios.get("https://api.github.com/users/toneiobufon/followers")
-.then(response => {
-  //console.log(response);
- 
-   response.data.forEach(item => {
-    const newProfile = gitCard(item)
-    profileCards.appendChild(newProfile)
-     
-   });
-})
-.catch(error => {
-  console.log("The data was not returned", error);
-});
+let userNames = ['toneiobufon',
+'Gio5298',
+'ShandaWoods',
+'D-Fink',
+'Hail91',
+'jevoncochran',
+]
+// get request helper function
 
-
-
-
-function gitCard(object) {
-
-  //define new elements
-  const myImg = document.createElement("img");
-  const myCard = document.createElement("div");
-  const cardInfo= document.createElement('div');
-  const myH3 = document.createElement("h3");
-  const user = document.createElement("p");
-  const location = document.createElement("p");
-  const profile = document.createElement("p");
-  const urlGit = document.createElement('a');
-  const followers = document.createElement("p");
-  const follows = document.createElement("p");
-  const bio = document.createElement("p");
-
-  //set up structure of elements
-  myCard.appendChild(myImg);
-  myCard.appendChild(cardInfo);
-  cardInfo.appendChild(myH3);
-  cardInfo.appendChild(user);
-  cardInfo.appendChild(location);
-  cardInfo.appendChild(profile);
-  cardInfo.appendChild(followers);
-  cardInfo.appendChild(follows);
-  myCard.appendChild(bio);
-  cardInfo.appendChild(urlGit);
-
-  //set class names
-  myCard.classList.add("img");
-  myCard.classList.add("card");
-  myCard.classList.add('card-info');
-  myCard.classList.add('name');
-  myCard.classList.add('username');
-  myCard.classList.add('p');
-  myCard.classList.add('p');
-  myCard.classList.add('a');
-  myCard.classList.add('p');
-  myCard.classList.add('p');
-  myCard.classList.add('p');
-
-  //set content
-  myImg.src = object.avatar_url;
-  myH3.textContent = object.name;
-  user.textContent = object.login;
-  location.textContent = `Location: ${object.location}`;
-  urlGit.textContent = object.html_url;
-  urlGit.href = object.html_url;
-  followers.textContent = `Followers: ${object.followers}`;
-  follows.textContent = `Following: ${object.following}`;
-  bio.textContent = `Bio: ${object.bio}`;
-
-
-
-  return myCard;
+const dataFetcher = (username) => {
+  axios.get(`https://api.github.com/users/${username}`)
+  .then(response => {
+    console.log('response is: ',response);
+    profileCard(response.data);
+    return response.data
+  }).catch(error => {
+    console.log('The data was not returned', error);
+  })
 }
+// function to loop through userNames and call dataFetcher
+const createCards = (userNames) => {
+  return userNames.forEach(userName => {
+    return dataFetcher(userName)
+  })
+}
+createCards(userNames);
